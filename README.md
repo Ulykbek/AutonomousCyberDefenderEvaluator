@@ -1,5 +1,9 @@
 # Autonomous CyberDefender Evaluator
 
+Research operators should follow the evaluator-only
+[reproduction runbook](docs/reproduction_runbook.md) after all CyberDefender
+processes have terminated.
+
 Evaluator-only workspace for WP1 experiments. This directory must not be mounted,
 copied, retrieved, or otherwise exposed to CyberDefender during a controlled run.
 
