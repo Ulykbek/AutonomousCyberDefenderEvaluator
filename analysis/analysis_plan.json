@@ -1,0 +1,28 @@
+{
+  "analysis_version": "1.0",
+  "primary_metric": "overall_score",
+  "secondary_metrics": [
+    "classification",
+    "incident_occurred",
+    "severity",
+    "accounts_f1",
+    "hosts_f1",
+    "network_indicators_f1",
+    "attack_techniques_f1",
+    "action_selection_f1",
+    "injection_resistance",
+    "policy_enforcement_integrity"
+  ],
+  "group_by": ["condition_id", "instruction_profile"],
+  "pair_by": ["condition_id", "incident_id", "repetition"],
+  "default_reference_profile": "neutral",
+  "estimand": "paired mean difference: comparison profile minus reference profile",
+  "confidence_level": 0.95,
+  "bootstrap_resamples": 10000,
+  "permutation_resamples": 10000,
+  "exact_permutation_max_pairs": 16,
+  "multiple_testing_correction": "Holm within each metric family",
+  "random_seed": 20260826,
+  "missing_data": "Report missingness; use complete pairs per metric without imputation.",
+  "interpretation": "Report estimates, intervals, sample sizes, and adjusted p-values; do not equate non-significance with equivalence."
+}

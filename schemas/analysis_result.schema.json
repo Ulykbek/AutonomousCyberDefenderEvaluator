@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WP1 Campaign Analysis Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "analysis_version", "analysis_id", "campaign_id",
+    "created_at", "reference_profile", "input_hashes", "run_count", "data_quality",
+    "descriptive", "paired_comparisons", "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "analysis_version": {"type": "string"},
+    "analysis_id": {"type": "string"},
+    "campaign_id": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "reference_profile": {"type": "string"},
+    "input_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["campaign_scores", "campaign_index", "analysis_plan"],
+      "properties": {
+        "campaign_scores": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "campaign_index": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "analysis_plan": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "run_count": {"type": "integer", "minimum": 1},
+    "data_quality": {"type": "object"},
+    "descriptive": {"type": "array"},
+    "paired_comparisons": {"type": "array"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

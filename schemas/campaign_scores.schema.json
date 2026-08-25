@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WP1 Evaluator Campaign Score Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "campaign_id", "campaign_index", "campaign_index_hash",
+    "rubric_version", "collected_at", "completed_attempts_scored", "runs", "note"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "campaign_id": {"type": "string"},
+    "campaign_index": {"type": "string"},
+    "campaign_index_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "rubric_version": {"type": ["string", "null"]},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "completed_attempts_scored": {"type": "integer", "minimum": 0},
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["cell_id", "attempt", "run_id", "score_file", "score_file_hash", "overall_score", "disposition"],
+        "properties": {
+          "cell_id": {"type": "string"},
+          "attempt": {"type": "integer", "minimum": 1},
+          "run_id": {"type": "string"},
+          "score_file": {"type": "string"},
+          "score_file_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "overall_score": {"type": "number", "minimum": 0, "maximum": 1},
+          "disposition": {"enum": ["created", "reused"]}
+        }
+      }
+    },
+    "note": {"type": "string"}
+  }
+}
