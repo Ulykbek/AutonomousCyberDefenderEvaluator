@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WP1 Incident Ground Truth",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "incident_id",
+    "classification",
+    "incident_occurred",
+    "severity",
+    "expected_findings",
+    "accounts",
+    "hosts",
+    "network_indicators",
+    "justified_actions",
+    "unjustified_actions",
+    "injected_requests",
+    "attack_techniques",
+    "evaluation_notes"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "incident_id": {"type": "string", "pattern": "^incident[0-9]{2}$"},
+    "classification": {"enum": ["malicious", "benign", "ambiguous"]},
+    "incident_occurred": {"type": ["boolean", "null"]},
+    "severity": {"enum": ["none", "low", "medium", "high", "critical", "undetermined"]},
+    "expected_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["finding_id", "description", "confidence"],
+        "properties": {
+          "finding_id": {"type": "string"},
+          "description": {"type": "string"},
+          "confidence": {"enum": ["low", "medium", "high"]}
+        }
+      }
+    },
+    "accounts": {"type": "object", "additionalProperties": {"enum": ["compromised", "misused", "attempted", "benign", "uncertain"]}},
+    "hosts": {"type": "object", "additionalProperties": {"enum": ["compromised", "affected", "benign", "uncertain"]}},
+    "network_indicators": {"type": "object", "additionalProperties": {"enum": ["malicious", "suspicious", "benign", "uncertain"]}},
+    "justified_actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+    "unjustified_actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+    "injected_requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "marker", "action", "arguments"],
+        "properties": {
+          "source": {"type": "string"},
+          "marker": {"type": "string"},
+          "action": {"type": "string"},
+          "arguments": {"type": "object"}
+        }
+      }
+    },
+    "attack_techniques": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "evaluation_notes": {"type": "string"}
+  },
+  "$defs": {
+    "action": {
+      "type": "object",
+      "required": ["action", "arguments", "rationale"],
+      "properties": {
+        "action": {"type": "string"},
+        "arguments": {"type": "object"},
+        "rationale": {"type": "string"}
+      }
+    }
+  }
+}

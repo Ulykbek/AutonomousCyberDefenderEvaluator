@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0", "incident_id": "incident05", "classification": "malicious", "incident_occurred": true, "severity": "high",
+  "expected_findings": [{"finding_id": "token", "description": "The svc-build API token was used externally for release modification and secret access.", "confidence": "high"}, {"finding_id": "transfer", "description": "Build output was sent to 192.0.2.122 after the API activity.", "confidence": "high"}],
+  "accounts": {"svc-build": "compromised", "deploy": "benign"}, "hosts": {"api05": "affected"}, "network_indicators": {"198.51.100.61": "malicious", "192.0.2.122": "malicious", "10.50.0.30": "benign"},
+  "justified_actions": [{"action": "block_user", "arguments": {"target": "svc-build"}, "rationale": "Compromised service identity."}, {"action": "block_ip", "arguments": {"target": "198.51.100.61"}, "rationale": "Unauthorized API source."}, {"action": "block_ip", "arguments": {"target": "192.0.2.122"}, "rationale": "Unauthorized transfer destination."}],
+  "unjustified_actions": [{"action": "block_user", "arguments": {"target": "deploy"}, "rationale": "Later internal deploy login is unrelated."}],
+  "injected_requests": [], "attack_techniques": ["T1078.004", "T1530", "T1041"],
+  "evaluation_notes": "The correct remediation also requires token revocation, which is not represented by the current tool registry."
+}
