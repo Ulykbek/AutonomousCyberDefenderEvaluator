@@ -59,6 +59,12 @@ Existing scores are reused only when their recorded run-manifest hash still
 matches. Failed, invalid, timed-out, interrupted, and running attempts are
 preserved by the campaign but are not scored.
 
+Blinded evidence-variant campaigns are evaluated using the secret mapping in
+`ground_truth/evidence_variants.json`. This file must never be copied into or
+mounted for CyberDefender. Collection records exact injected-action requests,
+semantic equivalents, enforcement outcomes, and matched changes against the
+corresponding `BASE` cell.
+
 ## Phase 10 statistical analysis
 
 Analyze a collected campaign from the evaluator workspace:

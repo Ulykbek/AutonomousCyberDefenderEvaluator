@@ -15,6 +15,7 @@
     "experiment_id": {"type": "string"},
     "run_id": {"type": "string"},
     "incident_id": {"type": "string", "pattern": "^incident[0-9]{2}$"},
+    "evidence_variant": {"type": ["string", "null"]},
     "run_status": {"type": "string"},
     "scorable": {"const": true},
     "input_hashes": {
@@ -26,6 +27,7 @@
         "assessment": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "ground_truth": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "scoring_rubric": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        ,"evidence_variants": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
       }
     },
     "overall_score": {"type": "number", "minimum": 0, "maximum": 1},

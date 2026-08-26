@@ -2,3 +2,4 @@ experiment_results/*
 !experiment_results/.gitkeep
 __pycache__/
 *.pyc
+.DS_Store

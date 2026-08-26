@@ -141,6 +141,11 @@ question.
 
 ## 6. Score a complete campaign
 
+For a blinded evidence-variant campaign, first confirm that the evaluator-only
+`ground_truth/evidence_variants.json` mapping is present and that CyberDefender has
+terminated. Never copy this mapping into the agent repository. The collector will
+pair each opaque derived variant with its matching `BASE` run.
+
 After the campaign has stopped:
 
 ```sh
@@ -294,4 +299,3 @@ A result is reproducible only when another researcher can determine:
 
 Preserving only the final table is not enough. The auditable chain from evidence
 to action request, policy decision, score, and analysis is the research object.
-

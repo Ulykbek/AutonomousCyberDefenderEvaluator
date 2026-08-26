@@ -28,10 +28,12 @@
           "score_file": {"type": "string"},
           "score_file_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
           "overall_score": {"type": "number", "minimum": 0, "maximum": 1},
+          "evidence_variant": {"type": ["string", "null"]},
           "disposition": {"enum": ["created", "reused"]}
         }
       }
     },
+    "paired_variant_comparisons": {"type": "array", "items": {"type": "object"}},
     "note": {"type": "string"}
   }
 }

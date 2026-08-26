@@ -199,6 +199,7 @@ def analyze(
             "run_id": run_id, "condition_id": cell["condition_id"],
             "incident_id": cell["incident_id"],
             "instruction_profile": cell["instruction_profile"],
+            "evidence_variant": cell.get("evidence_variant", "BASE"),
             "repetition": cell["repetition"], "attempt": cell["attempt"],
             "overall_score": score["overall_score"],
         }
@@ -211,34 +212,37 @@ def analyze(
         raise ValueError(f"reference profile absent: {reference_profile}")
 
     descriptive: list[dict[str, Any]] = []
-    for (condition, profile), group in sorted(_groups(rows).items()):
+    for (condition, profile, variant), group in sorted(_groups(rows).items()):
         for metric in metric_names:
             values = [float(row[metric]) for row in group if row.get(metric) is not None]
             record = {"condition_id": condition, "instruction_profile": profile,
+                      "evidence_variant": variant,
                       "metric": metric}
             record.update(describe(values, plan, f"{plan['random_seed']}:{condition}:{profile}:{metric}"))
             descriptive.append(record)
 
     comparisons: list[dict[str, Any]] = []
     conditions = sorted({row["condition_id"] for row in rows})
+    variants = sorted({row["evidence_variant"] for row in rows})
     for metric in metric_names:
         metric_family: list[dict[str, Any]] = []
         for condition in conditions:
-            reference = _paired_values(rows, condition, reference_profile, metric)
-            for profile in profiles:
-                if profile == reference_profile:
-                    continue
-                comparison = _paired_values(rows, condition, profile, metric)
-                record = {
-                    "condition_id": condition, "metric": metric,
-                    "reference_profile": reference_profile,
-                    "comparison_profile": profile,
-                }
-                record.update(paired_comparison(
-                    reference, comparison, plan,
-                    f"{plan['random_seed']}:{condition}:{metric}:{profile}",
-                ))
-                metric_family.append(record)
+            for variant in variants:
+                reference = _paired_values(rows, condition, reference_profile, variant, metric)
+                for profile in profiles:
+                    if profile == reference_profile:
+                        continue
+                    comparison = _paired_values(rows, condition, profile, variant, metric)
+                    record = {
+                        "condition_id": condition, "evidence_variant": variant,
+                        "metric": metric, "reference_profile": reference_profile,
+                        "comparison_profile": profile,
+                    }
+                    record.update(paired_comparison(
+                        reference, comparison, plan,
+                        f"{plan['random_seed']}:{condition}:{variant}:{metric}:{profile}",
+                    ))
+                    metric_family.append(record)
         holm_adjust(metric_family)
         comparisons.extend(metric_family)
 
@@ -268,14 +272,14 @@ def analyze(
     )
     write_csv(output_dir / "run_metrics.csv", rows, [
         "campaign_id", "cell_id", "run_id", "condition_id", "incident_id",
-        "instruction_profile", "repetition", "attempt", *metric_names,
+        "instruction_profile", "evidence_variant", "repetition", "attempt", *metric_names,
     ])
     write_csv(output_dir / "profile_summary.csv", descriptive, [
-        "condition_id", "instruction_profile", "metric", "n", "mean", "sd",
+        "condition_id", "instruction_profile", "evidence_variant", "metric", "n", "mean", "sd",
         "median", "min", "max", "mean_ci",
     ])
     write_csv(output_dir / "paired_comparisons.csv", comparisons, [
-        "condition_id", "metric", "reference_profile", "comparison_profile",
+        "condition_id", "evidence_variant", "metric", "reference_profile", "comparison_profile",
         "n_pairs", "mean_difference", "difference_ci", "paired_effect_dz",
         "p_value", "p_value_holm", "test",
     ])
@@ -286,21 +290,23 @@ def analyze(
     return result
 
 
-def _groups(rows: list[dict[str, Any]]) -> dict[tuple[str, str], list[dict[str, Any]]]:
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+def _groups(rows: list[dict[str, Any]]) -> dict[tuple[str, str, str], list[dict[str, Any]]]:
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
-        groups[(row["condition_id"], row["instruction_profile"])].append(row)
+        groups[(row["condition_id"], row["instruction_profile"], row["evidence_variant"])].append(row)
     return groups
 
 
 def _paired_values(
-    rows: list[dict[str, Any]], condition: str, profile: str, metric: str
+    rows: list[dict[str, Any]], condition: str, profile: str,
+    evidence_variant: str, metric: str,
 ) -> dict[tuple[str, str, int], float]:
     values: dict[tuple[str, str, int], float] = {}
     for row in rows:
         if (
             row["condition_id"] != condition
             or row["instruction_profile"] != profile
+            or row["evidence_variant"] != evidence_variant
             or row.get(metric) is None
         ):
             continue
