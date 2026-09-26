@@ -3,3 +3,12 @@ experiment_results/*
 __pycache__/
 *.pyc
 .DS_Store
+
+# Later unpublished CyberBroker research is outside Paper 171
+analysis/archive_cyberbroker_v3.py
+analysis/evaluate_cyberbroker_v3.py
+analysis_results/
+ground_truth/cyberbroker_v3/
+tests/test_cyberbroker_v3_analysis.py
+replication-output/
+release-dist/

@@ -1,0 +1,23 @@
+name: Paper 171 offline replication
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Scoring and analysis regression checks
+        run: |
+          python -m unittest discover -s tests -p 'test_score*.py' -v
+          python -m unittest discover -s tests -p 'test_analysis.py' -v
+          python -m unittest discover -s tests -p 'test_publication.py' -v
+      - name: Reproduce all reported numerical results without model calls
+        run: python publication/side2026/reproduce.py --output replication-output/side2026

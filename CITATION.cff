@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite this versioned research software and the associated Paper 171 when publication metadata are available."
+type: software
+title: "Policy-Mediated Autonomous Cyber Defence: Offline scoring and replication artifact"
+version: 1.0.0
+authors:
+  - family-names: Shambulov
+    given-names: Ulykbek
+    affiliation: Nazarbayev University
+    email: ulykbek.shambulov@nu.edu.kz
+repository-code: "https://github.com/Ulykbek/AutonomousCyberDefenderEvaluator"
+abstract: "Experiment 1 supporting artifact for From Adversarial Evidence to Executed Action: A Five-Model Study of Policy-Mediated Autonomous Cyber Defence. Accepted to SIDe 2026, Springer Nature STEAM-H route; final volume metadata and DOI pending."
+keywords:
+  - autonomous cyber defence
+  - reproducibility
+  - runtime authorization

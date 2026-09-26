@@ -1,0 +1,115 @@
+{
+  "source": "Side2026/171_Source/main.tex; accepted-paper local camera-ready draft",
+  "source_sha256": "0c8f5ab1c2c7101f92ea8e1bad85d39e8c6a1e88c678680849ba599292f97a62",
+  "table1": {
+    "xAI Grok Build 0.1": {
+      "R001": 0.653,
+      "R002": 0.683,
+      "R003": 0.661,
+      "icc_3_1": 0.444,
+      "positive_cells": 19,
+      "attacked_cells": 432,
+      "cell_rate_percent": 4.4,
+      "calls_allowed": 0,
+      "calls_denied": 19
+    },
+    "NVIDIA Nemotron 3 Super": {
+      "R001": 0.642,
+      "R002": 0.648,
+      "R003": 0.634,
+      "icc_3_1": 0.461,
+      "positive_cells": 35,
+      "attacked_cells": 432,
+      "cell_rate_percent": 8.1,
+      "calls_allowed": 0,
+      "calls_denied": 46
+    },
+    "DeepSeek V4 Flash 0731": {
+      "R001": 0.722,
+      "R002": 0.721,
+      "R003": 0.693,
+      "icc_3_1": 0.633,
+      "positive_cells": 12,
+      "attacked_cells": 432,
+      "cell_rate_percent": 2.78,
+      "calls_allowed": 0,
+      "calls_denied": 12
+    },
+    "GPT-5.6 Luna": {
+      "R001": 0.783,
+      "R002": 0.779,
+      "R003": 0.773,
+      "icc_3_1": 0.913,
+      "positive_cells": 11,
+      "attacked_cells": 427,
+      "cell_rate_percent": 2.58,
+      "calls_allowed": 0,
+      "calls_denied": 12
+    },
+    "Gemini 3.7 Flash": {
+      "R001": 0.762,
+      "R002": 0.768,
+      "R003": 0.771,
+      "icc_3_1": 0.975,
+      "positive_cells": 3,
+      "attacked_cells": 422,
+      "cell_rate_percent": 0.71,
+      "calls_allowed": 0,
+      "calls_denied": 3
+    }
+  },
+  "table2": {
+    "xAI Grok Build 0.1": [
+      0.66565,
+      0.67418,
+      0.6414,
+      0.62031,
+      0.607,
+      0.61948
+    ],
+    "NVIDIA Nemotron 3 Super": [
+      0.64122,
+      0.64652,
+      0.61882,
+      0.59639,
+      0.5776,
+      0.57566
+    ],
+    "DeepSeek V4 Flash 0731": [
+      0.71177,
+      0.70013,
+      0.69093,
+      0.67274,
+      0.63808,
+      0.62773
+    ],
+    "GPT-5.6 Luna": [
+      0.77813,
+      0.76789,
+      0.76232,
+      0.74834,
+      0.7201,
+      0.71495
+    ],
+    "Gemini 3.7 Flash": [
+      0.76685,
+      0.76704,
+      0.74838,
+      0.73358,
+      0.71718,
+      0.7108
+    ]
+  },
+  "totals": {
+    "scored_cells": 2858,
+    "attacked_cells": 2145,
+    "positive_cells": 80,
+    "injected_calls": 92,
+    "injected_allowed": 0,
+    "injected_denied": 92,
+    "all_requests": 7666,
+    "all_allowed": 5090,
+    "all_denied": 2576,
+    "all_executed": 5090
+  }
+}

@@ -1,79 +1,31 @@
-# Autonomous CyberDefender Evaluator
+# Paper 171: offline evaluation and replication
 
-Research operators should follow the evaluator-only
-[reproduction runbook](docs/reproduction_runbook.md) after all CyberDefender
-processes have terminated.
+This repository contains scoring code, labels and the Experiment 1 artifact for **From Adversarial Evidence to Executed Action: A Five-Model Study of Policy-Mediated Autonomous Cyber Defence**, Ulykbek Shambulov, Nazarbayev University. Accepted to SIDe 2026, Springer Nature STEAM-H route; final volume metadata and DOI are pending.
 
-Evaluator-only workspace for WP1 experiments. This directory must not be mounted,
-copied, retrieved, or otherwise exposed to CyberDefender during a controlled run.
+## Reproduce the published results offline
 
-It contains ground truth and scoring logic. Agent-visible evidence remains in the
-separate `AutonomousCyberDefenderAgenticAI` project.
+Using Python 3.10+ with the standard library:
 
-## Isolation rule
-
-During a controlled run, configure CyberDefender's filesystem scope to a staged
-run directory or the agent project only. Never add this evaluator directory as a
-workspace root, retrieval source, model attachment, prompt context, or container
-mount.
-
-Owner-only filesystem permissions reduce accidental disclosure to other OS users,
-but they do not isolate two processes running as the same user. Containerized runs
-should mount this directory only into the evaluator container after the agent run
-has finished.
-
-Ground truth files must not be copied into the agent repository. Evaluator output
-may contain expected answers, so `experiment_results/` is evaluator-only as well.
-
-## Validation
-
-From this directory, run:
-
-```bash
-python3 evaluator/validate_ground_truth.py \
-  --corpus ../AutonomousCyberDefenderAgenticAI/cases/corpus.json
+```sh
+python3 publication/side2026/reproduce.py --output replication-output/side2026
 ```
 
-## Phase 8 scoring
+The command verifies archive and scientific-input hashes, independently rescores all **2,858 observations**, and checks the paper's tables, missingness, ICC, weighting sensitivity and primary incident-clustered inference. It requires no agent checkout, network access, API credentials or model calls. Inputs are never overwritten; choose a new output directory for another run.
 
-After a Phase 7 agent run has terminated, score its preserved run directory:
+See [the artifact guide](publication/side2026/README.md) for contents, output definitions, limitations and figure instructions. The ~29 MiB archive preserves the full first-experiment campaign attempt history; failed attempts are provenance, not additional scored observations.
 
-```bash
-python3 evaluator/score_run.py /absolute/path/to/run
+## Research isolation
+
+This is an **evaluator-only** workspace. It contains ground truth and attack-variant labels. Never mount it, retrieve from it or include its results in an acting model's controlled run. Public accessibility would not remove this experimental separation requirement. Fresh agent runs use the companion [agent repository](https://github.com/Ulykbek/AutonomousCyberDefenderAgenticAI) and its staged incident contexts.
+
+Operator documentation remains in [the evaluator runbook](docs/reproduction_runbook.md), [scoring methodology](docs/scoring_methodology.md) and [statistical methodology](docs/statistical_analysis.md). Historical campaign scripts are retained; the publication wrapper resolves original absolute paths through a relative artifact index instead of requiring the author's machine layout.
+
+## Development and release
+
+```sh
+python3 -m unittest discover -s tests -p 'test_score*.py' -v
+python3 -m unittest discover -s tests -p 'test_analysis.py' -v
+python3 -m unittest discover -s tests -p 'test_publication.py' -v
 ```
 
-The versioned rubric and detailed methodology are stored in
-`evaluator/scoring_rubric.json` and `docs/scoring_methodology.md`. Numeric output
-is written beneath `experiment_results/` and must remain evaluator-only.
-
-## Phase 9 campaign collection
-
-After a Phase 9 campaign has finished, collect scores for every completed
-attempt without exposing evaluator state to the campaign process:
-
-```bash
-python3 evaluator/score_campaign.py /absolute/path/to/campaign.json
-```
-
-Existing scores are reused only when their recorded run-manifest hash still
-matches. Failed, invalid, timed-out, interrupted, and running attempts are
-preserved by the campaign but are not scored.
-
-Blinded evidence-variant campaigns are evaluated using the secret mapping in
-`ground_truth/evidence_variants.json`. This file must never be copied into or
-mounted for CyberDefender. Collection records exact injected-action requests,
-semantic equivalents, enforcement outcomes, and matched changes against the
-corresponding `BASE` cell.
-
-## Phase 10 statistical analysis
-
-Analyze a collected campaign from the evaluator workspace:
-
-```bash
-python3 analysis/analyze_campaign.py path/to/campaign_scores.json \
-  --analysis-id pilot-v1
-```
-
-The versioned plan and methodological cautions are documented in
-`analysis/analysis_plan.json` and `docs/statistical_analysis.md`. Analysis
-directories are immutable and are never silently overwritten.
+Later unpublished CyberBroker studies remain outside the Paper 171 artifact and are ignored by Git. See [release preparation](publication/side2026/RELEASE_CHECKLIST.md), [licensing status](LICENSING.md) and [CITATION.cff](CITATION.cff). A clean, history-free export of both repositories is available through `tools/export_publication.py`.
